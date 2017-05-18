@@ -16,35 +16,20 @@ class FormContainer extends Component {
 		this.handleDescriptionChange = this.handleDescriptionChange.bind(this);
 		this.getSentMessages()
 	}
-	componentDidMount() {
-		fetch('./api')									
-			.then(res => res.json(
-			{
-				"originator":"dinora",
-				"body":"The message to be sent"
-			}
-			))
-			.then(data => {
-				this.setState({
-					originator: data.phonenumber,
-					body: data.description
-				});
-			});
-	}
 
-	getSentMessages(){
-			fetch("https://rest.messagebird.com/messages?access_key=apK8p6emk55oaPy5UkPTzcouu",{
-				method: 'GET',
-				credentials: 'same-origin',  
-				headers: {
-					'Content-Type': 'application/x-www-form-urlencoded'
-				}
-			})
-			.then(response => response.json())
-			
-			.then(json => {
-				this.setState({des:json.items[0].recipients.items[0].recipient ,name:json.items[0].body})
-			})
+   getSentMessages(){
+		fetch("https://rest.messagebird.com/messages?access_key=apK8p6emk55oaPy5UkPTzcouu",{
+			method: 'GET',
+			credentials: 'same-origin',  
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded'
+			}
+		})
+		.then(response => response.json())
+
+		.then(json => {
+			this.setState({des:json.items[0].recipients.items[0].recipient ,name:json.items[0].body})
+		})
 	}
     sendMessages(value){
 		//https://rest.messagebird.com/script?mid=355692939849&keyword=MESSAGEBIRD&originator=355692939849&message=This+is+an+incoming+message
@@ -55,11 +40,18 @@ class FormContainer extends Component {
 				'Content-Type': 'application/x-www-form-urlencoded'
 			}
 		})
-		.then(response => response.json())
-		
-		.then(json => {
-			this.setState({des:json.des,name:json.name})
-		})
+	    
+	    	.then(res => res.json(
+		{
+			"recipients":"35512125212",
+			"originator":"dinora",
+			"body":"The message to be sent"
+		}
+		))
+		.then(data => {
+			this.setState({});
+		});
+	    
 		
 	}
 	handleCurrentPhoneChange(e) {
@@ -118,7 +110,7 @@ class FormContainer extends Component {
 						<th>Description</th>
 					</tr>
 					<tr>
-						<td>{"Originator: "   + this.state.des}</td>
+						<td>{"Recipient: "   + this.state.des}</td>
 						<td>{"Message content: " + this.state.name}</td>
 					</tr>
 				</table>
